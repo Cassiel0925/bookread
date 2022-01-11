@@ -1,0 +1,24 @@
+// 1 rem = fontSize px
+// 1 px = ( 1 / fontSize) rem 
+$fontSize: 37.5;
+@function px2rem($px) {
+    @return ($px / $fontSize)+rem;
+}
+
+@mixin center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+@mixin right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

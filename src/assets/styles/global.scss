@@ -1,7 +1,3 @@
 @import 'reset';
-// 1 rem = fontSize px
-// 1 px = ( 1 / fontSize) rem 
-$fontSize: 37.5;
-@function px2rem($px) {
-    @return ($px / $fontSize)+rem;
-}
+@import 'mixin';
+@import 'transition';

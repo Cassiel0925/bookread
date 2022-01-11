@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 const Ebook = () =>
-    import ('views/ebook/index')
+    import ('views/ebook/Ebook')
+const EbookReader = () =>
+    import ('components/ebook/EbookReader')
 
 Vue.use(VueRouter)
 
@@ -11,13 +13,19 @@ const routes = [{
         redirect: '/ebook'
     }, {
         path: '/ebook',
-        component: Ebook
-    }
+        component: Ebook,
+        children: [{
+            path: ':fileName',
+            component: EbookReader
+        }]
+    },
+
 
 ]
 
 const router = new VueRouter({
-    routes
+    routes,
+    mode: 'history'
 })
 
 export default router
