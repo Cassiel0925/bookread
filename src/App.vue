@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="read"></div>
+    
     <router-view/>
   </div>
 </template>
@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   #app {
     width: 100%;
     height: 100%;
+    background: #7d8188;
     overflow: hidden;
   }
 </style>

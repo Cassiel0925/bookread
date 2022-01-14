@@ -36,21 +36,10 @@
 </template>
 <script>
 import { ebookMixin } from 'utils/mixin'
-import { getReadTime } from 'utils/localStorage'
 
 export default {
    name:'SettingProgress',
    mixins: [ebookMixin],
-   computed: {
-     getSectionName() {
-         if(this.section) {
-             const sectionInfo = this.currentBook.section(this.section)
-             if(sectionInfo && sectionInfo.href) {
-                 return this.currentBook.navigation.get(sectionInfo.href).label
-             }
-         }
-     }  
-   },
    methods: {
     //    和enter事件相似
        onProgressChange(progress) {
@@ -85,25 +74,14 @@ export default {
                })
            }
        },
-        //    
+        //    章节显示
         displaySection() {
             const sectionInfo = this.currentBook.section(this.section)
             if (sectionInfo && sectionInfo.href) {
                 this.display(sectionInfo.href)
             }
         },
-        // 阅读时间
-        getReadTimeText() {
-            return this.$t('book.haveRead').replace('$1', this.getReadTimeByMinute())
-        },
-        getReadTimeByMinute() {
-            const readTime = getReadTime(this.fileName)
-            if(!readTime) {
-                return 0
-            } else {
-                return Math.ceil(readTime / 60)
-            }
-        },
+        
         
         
    }

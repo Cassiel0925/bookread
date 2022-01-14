@@ -9,7 +9,14 @@ const ebook = {
     defaultTheme: state => state.book.defaultTheme,
     progress: state => state.book.progress,
     bookAvailable: state => state.book.bookAvailable,
-    section: state => state.book.section
+    section: state => state.book.section,
+    cover: state => state.book.cover,
+    metadata: state => state.book.metadata,
+    navigation: state => state.book.navigation,
+    offsetY: state => state.book.offsetY,
+    isBookmark: state => state.book.isBookmark,
+    currentTab: state => state.book.currentTab,
+
 }
 
 export default ebook

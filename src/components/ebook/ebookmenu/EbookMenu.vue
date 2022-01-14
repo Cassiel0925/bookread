@@ -22,7 +22,7 @@
             </transition>
 
         <transition name="slide-up">
-            <div class="setting-wrapper" v-show=" settingVisible !== -1">
+            <div class="setting-wrapper" v-show=" settingVisible !== -1 && settingVisible !== 3">
                 <!-- 字体设置 -->
                 <setting-font-size v-show="menuVisible && settingVisible === 0"/>
                 <!-- 主题设置 -->
@@ -32,6 +32,7 @@
             </div>
         </transition>
         <font-family-popup/>
+        <ebook-slide v-show="menuVisible && settingVisible === 3"/>
     </div>
    
 </template>
@@ -41,13 +42,15 @@ import SettingFontSize from './childComps/SettingFontSize.vue'
 import FontFamilyPopup from './childComps/FontFamilyPopup.vue'
 import SettingTheme from './childComps/SettingTheme.vue'
 import SettingProgress from './childComps/SettingProgress.vue'
+import EbookSlide from './childComps/EbookSlide.vue'
 export default {
    name:'EbookMenu',
    components: { 
        SettingFontSize,
       FontFamilyPopup,
       SettingTheme,
-      SettingProgress 
+      SettingProgress,
+      EbookSlide 
     },
    mixins: [ebookMixin],
    methods: {
@@ -60,7 +63,7 @@ export default {
 <style lang="scss" scoped>
 @import "assets/styles/global";
 .ebook-reader {
-    position: relative;
+    // position: relative;
     .meau-bar-wrapper {
         position: absolute;
         left: 0;

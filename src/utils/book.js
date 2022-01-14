@@ -1,3 +1,6 @@
+import { getReadTime } from './localStorage'
+import { realPx } from './utils'
+// 字号大小列表
 export const FONT_SIZE_LIST = [
     { fontSize: 12 },
     { fontSize: 14 },
@@ -8,6 +11,7 @@ export const FONT_SIZE_LIST = [
     { fontSize: 24 },
 ]
 
+// 字体列表
 export const FONT_FAMILY = [
     { font: 'Default' },
     { font: 'Cabin' },
@@ -16,6 +20,7 @@ export const FONT_FAMILY = [
     { font: 'Tangerine' }
 ]
 
+// 主题列表
 export function themeList(vue) {
     return [{
             alias: vue.$t('book.themeDefault'),
@@ -23,7 +28,9 @@ export function themeList(vue) {
             style: {
                 body: {
                     'color': '#4c5059',
-                    'background': '#cecece'
+                    'background': '#cecece',
+                    'padding-top': `${realPx(48)}px!important`,
+                    'padding-bottom': `${realPx(48)}px!important`
                 }
             }
         },
@@ -33,7 +40,9 @@ export function themeList(vue) {
             style: {
                 body: {
                     'color': '#000',
-                    'background': '#ceeaba'
+                    'background': '#ceeaba',
+                    'padding-top': `${realPx(48)}px!important`,
+                    'padding-bottom': `${realPx(48)}px!important`
                 }
             }
         },
@@ -43,7 +52,9 @@ export function themeList(vue) {
             style: {
                 body: {
                     'color': '#fff',
-                    'background': '#000'
+                    'background': '#000',
+                    'padding-top': `${realPx(48)}px!important`,
+                    'padding-bottom': `${realPx(48)}px!important`
                 }
             }
         },
@@ -53,7 +64,9 @@ export function themeList(vue) {
             style: {
                 body: {
                     'color': '#000',
-                    'background': 'rgb(241, 236, 226)'
+                    'background': 'rgb(241, 236, 226)',
+                    'padding-top': `${realPx(48)}px!important`,
+                    'padding-bottom': `${realPx(48)}px!important`
                 }
             }
         },
@@ -73,4 +86,19 @@ export function addCss(href) {
         link.setAttribute('href', href)
         document.getElementsByTagName('head')[0].appendChild(link)
     }
+}
+
+// 获取阅读时间的分钟数
+export function getReadTimeByMinute(fileName) {
+    const readTime = getReadTime(fileName)
+    if (!readTime) {
+        return 0
+    } else {
+        return Math.ceil(readTime / 60)
+    }
+}
+
+// 将多维数组转换为一维数组
+export function flatten(array) {
+    return [].concat(...array.map(item => [].concat(item, ...flatten(item.subitems))))
 }

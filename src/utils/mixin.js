@@ -1,6 +1,6 @@
 import { mapGetters, mapActions } from 'vuex'
-import { themeList, addCss } from './book'
-import { saveLocation } from 'utils/localStorage'
+import { themeList, addCss, getReadTimeByMinute } from './book'
+import { saveLocation, getBookmark } from './localStorage'
 
 export const ebookMixin = {
     computed: {
@@ -15,10 +15,20 @@ export const ebookMixin = {
             'defaultTheme',
             'progress',
             'bookAvailable',
-            'section'
+            'section',
+            'cover',
+            'metadata',
+            'navigation',
+            'offsetY',
+            'isBookmark',
+            'currentTab'
         ]),
         themeList() {
             return themeList(this)
+        },
+        // 获取章节名称
+        getSectionName() {
+            return this.section ? this.navigation[this.section].label : ''
         }
     },
     methods: {
@@ -33,7 +43,13 @@ export const ebookMixin = {
             'setDefaultTheme',
             'setProgress',
             'setBookAvailable',
-            'setSection'
+            'setSection',
+            'setCover',
+            'setMetadata',
+            'setNavigation',
+            'setOffsetY',
+            'setIsBookmark',
+            'setCurrentTab'
         ]),
         // 9. 全局主题设置
         initGlobalStyle() {
@@ -59,14 +75,29 @@ export const ebookMixin = {
         refreshLocation() {
             // 当前进度的对象
             const currentLocation = this.currentBook.rendition.currentLocation()
+            if (currentLocation && currentLocation.start) {
                 // console.log(currentLocation);
-            const startCfi = currentLocation.start.cfi
-            const progress = this.currentBook.locations.percentageFromCfi(startCfi)
-                // console.log(progress);
-            this.setProgress(Math.floor(progress * 100))
-                // 获取章节名称
-            this.setSection(currentLocation.start.index)
-            saveLocation(this.fileName, startCfi)
+                const startCfi = currentLocation.start.cfi
+                const progress = this.currentBook.locations.percentageFromCfi(startCfi)
+                    // console.log(progress);
+                this.setProgress(Math.floor(progress * 100))
+                    // 获取章节名称
+                this.setSection(currentLocation.start.index)
+                saveLocation(this.fileName, startCfi)
+
+                // 书签
+                const bookmark = getBookmark(this.fileName)
+                if (bookmark) {
+                    if (bookmark.some(item => item.cfi === startCfi)) {
+                        this.setIsBookmark(true)
+                    } else {
+                        this.setIsBookmark(false)
+                    }
+                } else {
+                    this.setIsBookmark(false)
+                }
+            }
+
         },
         // display 方法
         display(target, cb) {
@@ -81,6 +112,20 @@ export const ebookMixin = {
                     if (cb) cb()
                 })
             }
-        }
+        },
+        //    5. 标题栏和菜单栏的隐藏
+        hideTitleAndMenu() {
+            // this.$store.dispatch('setMenuVisible', false)
+            this.setMenuVisible(false)
+            this.setSettingVisible(-1)
+        },
+
+        // 阅读时间
+        getReadTimeText() {
+            return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
+        },
+
+
+
     }
 }
