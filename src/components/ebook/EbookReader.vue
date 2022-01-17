@@ -100,7 +100,7 @@ export default {
         },
         // 点击左侧 返回上一页；点击中间 显示和隐藏标题栏和菜单栏；点击右侧，返回下一页
         onMaskClick(e) {
-            console.log(this.mouseState);
+            // console.log(this.mouseState);
             if (this.mouseState && (this.mouseState === 2 || this.mouseState ===3)) {
                 return
             }

@@ -16,6 +16,9 @@ const ebook = {
     offsetY: state => state.book.offsetY,
     isBookmark: state => state.book.isBookmark,
     currentTab: state => state.book.currentTab,
+    // home
+    hotSearchOffsetY: state => state.store.hotSearchOffsetY,
+    flapCardVisible: state => state.store.flapCardVisible,
 
 }
 

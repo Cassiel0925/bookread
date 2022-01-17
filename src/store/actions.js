@@ -50,6 +50,13 @@ const actions = {
     setCurrentTab: ({ commit }, currentTab) => {
         return commit('SET_CURRENTTAB', currentTab)
     },
+    // home
+    setHotSearchOffsetY: ({ commit }, hotSearchOffsetY) => {
+        return commit('SET_HOT_SEARCH_OFFSETY', hotSearchOffsetY)
+    },
+    setFlapCardVisible: ({ commit }, flapCardVisible) => {
+        return commit('SET_FLAPCARD_VISIBLE', flapCardVisible)
+    },
 }
 
 export default actions

@@ -5,13 +5,21 @@ const Ebook = () =>
     import ('views/ebook/Ebook')
 const EbookReader = () =>
     import ('components/ebook/EbookReader')
+const Index = () =>
+    import ('views/store/Index')
+const StoreHome = () =>
+    import ('views/store/StoreHome')
+const StoreDetail = () =>
+    import ('views/store/StoreDetail')
+
 
 Vue.use(VueRouter)
 
 const routes = [{
         path: '',
-        redirect: '/ebook'
-    }, {
+        redirect: '/store'
+    },
+    {
         path: '/ebook',
         component: Ebook,
         children: [{
@@ -19,6 +27,20 @@ const routes = [{
             component: EbookReader
         }]
     },
+    {
+        path: '/store',
+        component: Index,
+        redirect: '/store/home',
+        children: [{
+                path: 'home',
+                component: StoreHome
+            },
+            {
+                path: 'detail',
+                component: StoreDetail
+            },
+        ]
+    }
 
 
 ]

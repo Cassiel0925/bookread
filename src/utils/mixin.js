@@ -2,6 +2,33 @@ import { mapGetters, mapActions } from 'vuex'
 import { themeList, addCss, getReadTimeByMinute } from './book'
 import { saveLocation, getBookmark } from './localStorage'
 
+export const storeHomeMixin = {
+    computed: {
+        ...mapGetters([
+            'offsetY',
+            'hotSearchOffsetY',
+            'flapCardVisible'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'setOffsetY',
+            'setHotSearchOffsetY',
+            'setFlapCardVisible'
+        ]),
+        // 去阅读的详情页
+        showBookDetail(book) {
+            this.$router.push({
+                path: '/store/detail',
+                query: {
+                    fileName: book.fileName,
+                    category: book.categoryText
+                }
+            })
+        },
+    }
+}
+
 export const ebookMixin = {
     computed: {
         ...mapGetters([
