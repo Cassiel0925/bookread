@@ -22,6 +22,7 @@ import { getFontFamily,
          saveTheme,
          getLocation } from 'utils/localStorage'
 import { flatten } from 'utils/book'
+import {getLocalForage} from 'utils/localForage'
 
 export default {
    name:'EbookReader',
@@ -275,8 +276,8 @@ export default {
         },
 
     //    1. 阅读器的解析和渲染
-       initEpub () {
-         const url = 'http://localhost:9091/epub/' + this.fileName 
+       initEpub (url) {
+        //  const url = 'http://localhost:9091/epub/' + this.fileName 
         //  console.log(url);
          this.book = new Epub(url)
          this.setCurrentBook(this.book)
@@ -302,16 +303,32 @@ export default {
     // const fileName = this.$route.params.fileName
     //    console.log('${baseUrl}${fileName}.epub');
         // console.log(fileName);
-        const fileName = (this.$route.params.fileName).split('|').join('/')
-        // console.log(this.fileName);
-        this.setFileName(fileName).then(() => {
-            this.initEpub()
-            
-            
-        })
+
+        // const fileName = (this.$route.params.fileName).split('|').join('/')
+        // this.setFileName(fileName).then(() => {
+        //     this.initEpub()
+        // })
+
         // this.$store.dispatch('setFileName', fileName).then (() => {
         //     this.initEpub()
         // })
+    
+        const books =this.$route.params.fileName.split('|')
+        const fileName = books[1]
+        getLocalForage(fileName, (err, blob) => {
+            if(!err && blob) {
+                console.log('find');
+                this.setFileName(books.join('/')).then(() => {
+                    this.initEpub(blob)
+                })
+            } else {
+                console.log('online');
+                this.setFileName(books.join('/')).then(() => {
+                    const url = 'http://localhost:9091/epub/' + this.fileName
+                    this.initEpub(url)
+                })
+            }
+        })
    }
 }
 </script>

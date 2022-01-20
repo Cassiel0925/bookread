@@ -1,6 +1,6 @@
 <template>
     <div class="category-list">
-        <title-bar :leftItem="categoryText(categoryData.category)" :rightItem="$t(`home.seeAll`)"/>
+        <title-bar :leftItem="categoryText(categoryData.category)" :rightItem="$t(`home.seeAll`)" @onClick="showBookCategory"/>
         <div class="list-wrapper">
             <div class="list-item" v-for="(item, index) in categoryData.list" :key="index" @click="showBookDetail(item)">
                 <div class="img-wrapper">
@@ -17,7 +17,7 @@
 <script>
 import TitleBar from '../../common/TitleBar.vue'
 import {storeHomeMixin} from 'utils/mixin'
-import { categoryText } from 'utils/store'
+import { categoryText, getCategoryName } from 'utils/store'
 export default {
    name:'CategoryList',
    components: {
@@ -30,6 +30,15 @@ export default {
    methods: {
        categoryText(index) {
            return categoryText(index, this)
+       },
+       showBookCategory() {
+           this.$router.push({
+                path: '/store/list',
+                query: {
+                    category: getCategoryName(this.categoryData.category),
+                    categoryText: this.categoryText(this.categoryData.category)
+                }
+            })
        }
    }
 }

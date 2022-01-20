@@ -157,7 +157,7 @@ export default {
            // 获取电子书的metadata信息
            this.book.loaded.metadata.then(metadata => {
                this.metadata = metadata
-               console.log(this.metadata);
+            //    console.log(this.metadata);
            })
 
            // 获取电子书的目录信息

@@ -1,6 +1,51 @@
 import { mapGetters, mapActions } from 'vuex'
 import { themeList, addCss, getReadTimeByMinute } from './book'
 import { saveLocation, getBookmark } from './localStorage'
+import { gotoBookDetail } from './store'
+
+import { appendAddToShelf } from "utils/store";
+import { getBookShelf, saveBookShelf } from 'utils/localStorage'
+import { shelf } from 'api/store'
+
+export const storeShelfMixin = {
+    computed: {
+        ...mapGetters([
+            'isEditMode',
+            'shelfList',
+            'shelfSelected',
+            'shelfTitleVisible',
+            'offsetY'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'setIsEditMode',
+            'setShelfList',
+            'setShelfSelected',
+            'setShelfTitleVisible',
+            'setOffsetY'
+        ]),
+        // 去阅读的详情页
+        showBookDetail(book) {
+            gotoBookDetail(this, book)
+        },
+        getShelfList() {
+            let shelfList = getBookShelf()
+            if (!shelfList) {
+                shelf().then(response => {
+                    if (response.status === 200 && response.data && response.data.bookList) {
+                        shelfList = appendAddToShelf(response.data.bookList)
+                        saveBookShelf(shelfList)
+                        this.setShelfList(shelfList)
+                    }
+                })
+            } else {
+                this.setShelfList(shelfList)
+            }
+
+        },
+    }
+}
 
 export const storeHomeMixin = {
     computed: {
@@ -18,14 +63,10 @@ export const storeHomeMixin = {
         ]),
         // 去阅读的详情页
         showBookDetail(book) {
-            this.$router.push({
-                path: '/store/detail',
-                query: {
-                    fileName: book.fileName,
-                    category: book.categoryText
-                }
-            })
+            gotoBookDetail(this, book)
         },
+        // 查看全部
+
     }
 }
 

@@ -19,7 +19,7 @@
             <home-recommend :recommend="recommend"/>
 
             <!-- 精选 -->
-            <features :features="features" class="features"/>
+            <features :features="features" class="features" :titleText="$t(`home.featured`)" :btnText="$t(`home.seeAll`)"/>
 
             <!-- 分类列表 -->
             <div class="category-list-wrapper" v-for="(item, index) in categoryList" :key="index">
@@ -87,7 +87,6 @@ export default {
         home().then(response => {
             if (response && response.status === 200) {
                 const data = response.data
-                console.log(data);
                 // banner
                 this.banner = data.banner
                 // guessYouLike

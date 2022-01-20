@@ -36,7 +36,8 @@
                         type="text" 
                         :placeholder="$t('home.hint')"
                         v-model="searchText"
-                        @click="showHotSearch()">
+                        @click="showHotSearch()"
+                        @keyup.13.exact="search">
                 </div>
             </div>
             <!-- 搜索 end -->
@@ -103,7 +104,7 @@ export default {
         },
         hideHotSearch() {
             this.hotSearchVisible = false
-            this.$refs.hotSearch.reset()
+            // this.$refs.hotSearch.reset()
             if(this.offsetY > 0) {
                 this.hideTitle()
                 this.showShadow()
@@ -118,11 +119,24 @@ export default {
             } else {
                 this.hideShadow()
             }
-            this.hideHotSearch()
+            if(this.hotSearchVisible) {
+                this.hideHotSearch()
+            } else {
+                this.$router.push('/store/shelf')
+            }
         },
         // 显示卡片
         showFlapCard() {
             this.setFlapCardVisible(true)
+        },
+        //搜索模块
+        search() {
+            this.$router.push({
+                path: '/store/list',
+                query: {
+                    keyword: this.searchText
+                }
+            })
         }
         
    }

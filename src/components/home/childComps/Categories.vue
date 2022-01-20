@@ -1,8 +1,8 @@
 <template>
     <div class="categories">
-        <title-bar :leftItem="$t(`home.category`)" :rightItem="$t(`home.seeAll`)"/>
+        <title-bar :leftItem="$t(`home.category`)" :rightItem="$t(`home.seeAll`)" @onClick="showBookList"/>
         <div class="categories-list">
-            <div class="list-item" v-for="(item, index) in categories" :key="index">
+            <div class="list-item" v-for="(item, index) in categories" :key="index" @click="showBookCategory(item)">
                 <div class="category-wrapper">
                     <div class="category-content">
                         <div class="category-name title-medium">{{categoryText(item.category)}}</div>
@@ -21,7 +21,7 @@
 </template>
 <script>
 import TitleBar from '../../common/TitleBar.vue'
-import {categoryText} from 'utils/store'
+import {categoryText, getCategoryName} from 'utils/store'
 export default {
    name:'Categories',
    components: {
@@ -33,7 +33,19 @@ export default {
    methods: {
        categoryText(index) {
            return categoryText(index, this)
-       }
+       },
+       showBookList() {
+           this.$router.push('/store/list')
+       },
+       showBookCategory(item) {
+        this.$router.push({
+          path: '/store/list',
+          query: {
+            category: getCategoryName(item.category),
+            categoryText: this.categoryText(item.category)
+          }
+        })
+      },
    }
 }
 </script>

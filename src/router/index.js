@@ -11,7 +11,10 @@ const StoreHome = () =>
     import ('views/store/StoreHome')
 const StoreDetail = () =>
     import ('views/store/StoreDetail')
-
+const StoreList = () =>
+    import ('views/store/StoreList')
+const StoreShelf = () =>
+    import ('views/store/StoreShelf')
 
 Vue.use(VueRouter)
 
@@ -39,6 +42,14 @@ const routes = [{
                 path: 'detail',
                 component: StoreDetail
             },
+            {
+                path: 'list',
+                component: StoreList
+            },
+            {
+                path: 'shelf',
+                component: StoreShelf
+            }
         ]
     }
 

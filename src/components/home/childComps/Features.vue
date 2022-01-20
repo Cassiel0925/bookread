@@ -1,9 +1,9 @@
 <template>
     <div class="features">
-        <title-bar :leftItem="$t(`home.featured`)" :rightItem="$t(`home.seeAll`)"/>
+        <title-bar :leftItem="titleText" :rightItem="btnText" v-if="features && features.length > 0"/>
         <div class="features-list">
             <div class="features-item-wrapper">
-                <div class="features-item" v-for="(item, index) in features" :key="index">
+                <div class="features-item" v-for="(item, index) in features" :key="index" @click="showBookDetail(item)">
                     <div class="img-wrapper">
                         <img :src="item.cover" alt="">
                     </div>
@@ -19,14 +19,24 @@
 </template>
 <script>
 import TitleBar from '../../common/TitleBar.vue'
+import {storeHomeMixin} from 'utils/mixin'
 import { categoryText } from 'utils/store'
 export default {
    name:'Features',
    components: { 
        TitleBar 
     },
+    mixins: [storeHomeMixin],
    props: {
-       features: Array
+       features: Array,
+       titleText: {
+           type: String,
+           default: ''
+       },
+       btnText: {
+           type: String,
+           default: ''
+       }
    },
    methods: {
        categoryText(index) {

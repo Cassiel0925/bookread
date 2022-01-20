@@ -1,6 +1,6 @@
 <template>
     <div class="home-recommend">
-        <title-bar :leftItem="$t(`home.recommend`)" :rightItem="$t(`home.seeAll`)"/>
+        <title-bar :leftItem="$t(`home.recommend`)" :rightItem="$t(`home.seeAll`)" />
 
         <div class="recommend-list">
             <div class="list-item" v-for="(item, index) in recommend" :key="index" @click="showBookDetail(item)">

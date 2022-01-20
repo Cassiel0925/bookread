@@ -3,6 +3,7 @@
         <div class="title-left" @click="back">
             <span class="icon-back icon"></span>
         </div>
+        <div class="title-text" v-if="title">{{title}}</div>
         <div class="title-right ">
             <span class="icon-shelf icon"></span>
         </div>
@@ -11,6 +12,9 @@
 <script>
 export default {
    name:'DetailTitle',
+   props: {
+       title: String
+   },
    data () {
        return {
            ifHideShadow: true
@@ -51,6 +55,11 @@ export default {
         .title-right {
             flex: 1;
             @include right;
+        }
+        .title-text {
+            flex: 1;
+            font-size: px2rem(16);
+            @include center;
         }
     }
 </style>
