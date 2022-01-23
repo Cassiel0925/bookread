@@ -1,3 +1,4 @@
+import { getLocalStorage, getBookShelf, saveBookShelf } from 'utils/localStorage'
 export const flapCardList = [{
         r: 255,
         g: 102,
@@ -205,5 +206,73 @@ export function gotoBookDetail(vue, book) {
             fileName: book.fileName,
             category: book.categoryText
         }
+    })
+}
+
+export function computeId(list) {
+    return list.map((book, index) => {
+        if (book.type !== 3) {
+            book.id = index + 1
+            if (book.itemList) {
+                book.itemList = computeId(book.itemList)
+            }
+        }
+        return book
+    })
+}
+
+// 没弄懂？？？
+export function flatBookList(bookList) {
+    if (bookList) {
+        // 过滤掉最后一个加号列表
+        let orgBookList = bookList.filter(item => {
+                return item.type !== 3
+            })
+            // 分组中的书籍
+        const categoryList = bookList.filter(item => {
+            return item.type === 2
+        })
+        categoryList.forEach(item => {
+            const index = orgBookList.findIndex(v => {
+                return v.id === item.id
+            })
+            if (item.itemList) {
+                item.itemList.forEach(subItem => {
+                    orgBookList.splice(index, 0, subItem)
+                })
+            }
+        })
+        orgBookList.forEach((item, index) => {
+            item.id = index + 1
+        })
+        orgBookList = orgBookList.filter(item => item.type !== 2)
+        return orgBookList
+    } else {
+        return []
+    }
+}
+// 根据fileName找书
+export function findBook(fileName) {
+    const bookList = getLocalStorage('shelf')
+    return flatBookList(bookList).find(item => item.fileName === fileName)
+}
+
+// 添加到书架
+export function addToShelf(book) {
+    let shelfList = getBookShelf('shelf')
+    shelfList = removeAddFromShelf(shelfList)
+    book.type = 1
+    shelfList.push(book)
+    shelfList = computeId(shelfList)
+    shelfList = appendAddToShelf(shelfList)
+    saveBookShelf(shelfList)
+}
+
+export function removeFromBookShelf(book) {
+    return getBookShelf().filter(item => {
+        if (item.itemList) {
+            item.itemList = removeAddFromShelf(item.itemList)
+        }
+        return item.fileName !== book.fileName
     })
 }

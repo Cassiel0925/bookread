@@ -23,6 +23,8 @@ const ebook = {
     shelfList: state => state.store.shelfList,
     shelfSelected: state => state.store.shelfSelected,
     shelfTitleVisible: state => state.store.shelfTitleVisible,
+    currentType: state => state.store.currentType,
+    shelfCategory: state => state.store.shelfCategory,
 }
 
 export default ebook

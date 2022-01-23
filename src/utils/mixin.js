@@ -3,7 +3,7 @@ import { themeList, addCss, getReadTimeByMinute } from './book'
 import { saveLocation, getBookmark } from './localStorage'
 import { gotoBookDetail } from './store'
 
-import { appendAddToShelf } from "utils/store";
+import { appendAddToShelf, removeAddFromShelf, computeId } from "utils/store";
 import { getBookShelf, saveBookShelf } from 'utils/localStorage'
 import { shelf } from 'api/store'
 
@@ -14,7 +14,9 @@ export const storeShelfMixin = {
             'shelfList',
             'shelfSelected',
             'shelfTitleVisible',
-            'offsetY'
+            'offsetY',
+            'currentType',
+            'shelfCategory'
         ])
     },
     methods: {
@@ -23,12 +25,15 @@ export const storeShelfMixin = {
             'setShelfList',
             'setShelfSelected',
             'setShelfTitleVisible',
-            'setOffsetY'
+            'setOffsetY',
+            'setCurrentType',
+            'setShelfCategory'
         ]),
         // 去阅读的详情页
         showBookDetail(book) {
             gotoBookDetail(this, book)
         },
+        // 获取书架列表
         getShelfList() {
             let shelfList = getBookShelf()
             if (!shelfList) {
@@ -36,14 +41,37 @@ export const storeShelfMixin = {
                     if (response.status === 200 && response.data && response.data.bookList) {
                         shelfList = appendAddToShelf(response.data.bookList)
                         saveBookShelf(shelfList)
-                        this.setShelfList(shelfList)
+                        return this.setShelfList(shelfList)
                     }
                 })
             } else {
-                this.setShelfList(shelfList)
+                return this.setShelfList(shelfList)
             }
 
         },
+        // 获取分类列表
+        getCategoryList(title) {
+            this.getShelfList().then(() => {
+                const categoryList = this.shelfList.filter(book => book.type === 2 && book.title === title)
+                this.setShelfCategory(categoryList[0])
+            })
+        },
+        // 移除分组 ?? 不是很理解
+        moveOutOfGroup(f) {
+            this.setShelfList(this.shelfList.map(book => {
+                if (book.type === 2 && book.itemList) {
+                    book.itemList = book.itemList.filter(subBook => !subBook.selected)
+                }
+                return book
+            })).then(() => {
+                const list = computeId(appendAddToShelf([].concat(
+                    removeAddFromShelf(this.shelfList), ...this.shelfSelected)))
+                this.setShelfList(list).then(() => {
+                    this.simpleToast(this.$t('shelf.moveBookOutSuccess'))
+                    if (f) f()
+                })
+            })
+        }
     }
 }
 

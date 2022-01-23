@@ -2,12 +2,12 @@ import CreateAPI from 'vue-create-api'
 import Vue from 'vue'
 import Toast from 'components/common/Toast'
 import Popup from 'components/common/Popup'
-import GroupDialog from 'components/shelf/ShelfGroupDialog'
+import ShelfGroupDialog from 'components/shelf/ShelfGroupDialog'
 
 Vue.use(CreateAPI)
 Vue.createAPI(Toast, true)
 Vue.createAPI(Popup, true)
-Vue.createAPI(GroupDialog, true)
+Vue.createAPI(ShelfGroupDialog, true)
 
 Vue.mixin({
     methods: {
@@ -28,8 +28,10 @@ Vue.mixin({
             toast.show()
             toast.updateText(text)
         },
-        dialog() {
-            return this.$createGroupDialog()
+        dialog(settings) {
+            return this.$createShelfGroupDialog({
+                $props: settings
+            })
         }
     }
 })

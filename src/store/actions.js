@@ -69,6 +69,12 @@ const actions = {
     setShelfTitleVisible: ({ commit }, shelfTitleVisible) => {
         return commit('SET_SHELF_TITLE_VISIBLE', shelfTitleVisible)
     },
+    setCurrentType: ({ commit }, currentType) => {
+        return commit('SET_CURRENT_TYPE', currentType)
+    },
+    setShelfCategory: ({ commit }, shelfCategory) => {
+        return commit('SET_SHELF_CATEGORY', shelfCategory)
+    },
 }
 
 export default actions

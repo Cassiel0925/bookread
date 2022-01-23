@@ -15,6 +15,10 @@ const StoreList = () =>
     import ('views/store/StoreList')
 const StoreShelf = () =>
     import ('views/store/StoreShelf')
+const StoreCategory = () =>
+    import ('views/store/StoreCategory')
+const StoreSpeaking = () =>
+    import ('views/store/StoreSpeaking')
 
 Vue.use(VueRouter)
 
@@ -33,7 +37,7 @@ const routes = [{
     {
         path: '/store',
         component: Index,
-        redirect: '/store/home',
+        redirect: '/store/shelf',
         children: [{
                 path: 'home',
                 component: StoreHome
@@ -49,6 +53,14 @@ const routes = [{
             {
                 path: 'shelf',
                 component: StoreShelf
+            },
+            {
+                path: 'category',
+                component: StoreCategory
+            },
+            {
+                path: 'speaking',
+                component: StoreSpeaking
             }
         ]
     }

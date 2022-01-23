@@ -34,7 +34,11 @@
             </div>
 
             <!-- 底部导航 -->
-            <bottom-bar :bookItem="bookItem" @readBook="readBook"/>
+            <bottom-bar :bookItem="bookItem" 
+                        @readBook="readBook"
+                        @trialListening="trialListening"
+                        @addOrRemoveShelf="addOrRemoveShelf"
+                        :inBookShelf="inBookShelf"/>
         </scroll>
     </div>
 </template>
@@ -49,6 +53,10 @@ import Scroll from 'components/common/Scroll.vue'
 
 import {detail} from 'api/store'
 import {realPx} from 'utils/utils'
+import {getLocalForage} from 'utils/localForage'
+import {saveBookShelf, getBookShelf} from 'utils/localStorage'
+import { removeFromBookShelf, addToShelf } from 'utils/store'
+import {storeShelfMixin} from 'utils/mixin'
 
 import Epub from 'epubjs'
 
@@ -62,6 +70,7 @@ export default {
       Catalog,
       BottomBar
    },
+   mixins: [storeShelfMixin],
    data () {
        return {
            bookItem: null,
@@ -111,9 +120,26 @@ export default {
                 return []
             }
       },
+      // 判断当前的电子书是否存在于书架
+      inBookShelf() {
+        if (this.bookItem && this.shelfList) {
+          // 定义一个自执行函数，将书架转为一维数组结构，并且只保留type为1的数据（type=1的为电子书）
+          const flatShelf = (function flatten(arr) {
+            return [].concat(...arr.map(v => v.itemList ? [v, ...flatten(v.itemList)] : v))
+          })(this.shelfList).filter(item => item.type === 1)
+          // 查找当前电子书是否存在于书架
+          const book = flatShelf.filter(item => item.fileName === this.bookItem.fileName)
+          return book && book.length > 0
+        } else {
+          return false
+        }
+      }
    },
    mounted () {
        this.init()
+       if (!this.shelfList || this.shelfList.length === 0) {
+        this.getShelfList()
+      }
    },
    methods: {
        // 1. 电子书详情页初始化
@@ -229,12 +255,52 @@ export default {
         }
       },
 
-      // 7.
+      // 7. 阅读
       readBook() {
            this.$router.push({
                path: `/ebook/${this.bookItem.categoryText}|${this.fileName}.epub`
            })
-       }
+       },
+
+       // 8. 听书
+       trialListening() {
+           // 如果电子书已经缓存，从IndexedDB中读取电子书
+           getLocalForage(this.bookItem.fileName, (err, blob) => {
+               if(!err && blob && blob instanceof Blob) {
+                   this.$router.push({
+                       path: '/store/speaking',
+                       query: {
+                           fileName: this.bookItem.fileName
+                       }
+                   })
+               }else {
+                   // 如果没有缓存，直接跳转到听书页面
+                   this.$router.push({
+                       path: '/store/speaking',
+                       query: {
+                           fileName: this.bookItem.fileName,
+                           opf: this.opf
+                       }
+                   })
+               }
+           })
+       },
+
+       //9. 移动到书架
+       addOrRemoveShelf() {
+           // 如果电子书存在于书架，则从书架中移除电子书
+        if (this.inBookShelf) {
+          this.setShelfList(removeFromBookShelf(this.bookItem))
+            .then(() => {
+              // 将书架数据保存到LocalStorage
+              saveBookShelf(this.shelfList)
+            })
+        } else {
+          // 如果电子书不存在于书架，则添加电子书到书架
+          addToShelf(this.bookItem)
+          this.setShelfList(getBookShelf())
+        }
+       },
    }
 }
 </script>

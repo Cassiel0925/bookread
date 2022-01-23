@@ -57,3 +57,10 @@ export function download(book, onSuccess, onError, onProgress) {
             if (onError) onError(err)
         })
 }
+
+export function flatList() {
+    return axios({
+        method: 'get',
+        url: 'http://47.99.166.157:3000/book/flat-list'
+    })
+}

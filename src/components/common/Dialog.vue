@@ -13,7 +13,10 @@
 
             <!-- 按钮 start -->
             <div class="dialog-btn-wrapper">
-               <div class="dialog-btn">{{$t('shelf.cancel')}}</div>
+              <slot name="btn">
+                <div class="dialog-btn" @click="hide">{{$t('shelf.cancel')}}</div>
+                <div class="dialog-btn">{{$t('shelf.confirm')}}</div>
+              </slot>
             </div>
             <!-- 按钮 end -->
 
@@ -25,11 +28,11 @@
 export default {
    name:'Dialog',
    props: {
-      title: String
+      title: String,
    },
    data () {
       return {
-         visible: false
+         visible: true
       }
    },
    methods: {
@@ -50,16 +53,19 @@ export default {
       left: 0;
       bottom: 0;
       right: 0;
-      z-index: 2000;
+      z-index: 2600;
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, .3);
+      @include center;
       .dialog-wrapper {
          position: relative;
+         display: flex;
+         flex-direction: column;
          width: 60%;
          max-height: 80%;
          background: #fff;
-         border-radius: px2rem(8);
+         border-radius: px2rem(10);
          .dialog-title-wrapper {
             font-size: px2rem(20);
             font-weight: 700;
@@ -77,6 +83,7 @@ export default {
             text-align: center;
             padding: px2rem(15) 0;
             box-sizing: border-box;
+            border-radius: 0 0 px2rem(10) px2rem(10);
             .dialog-btn {
                flex: 1;
             }

@@ -1,19 +1,26 @@
 <template>
     <div class="bottom-bar">
         <div class="bottom-btn" @click.stop.prevent="readBook()">{{$t('detail.read')}}</div>
-        <div class="bottom-btn">{{$t('detail.listen')}}</div>
-        <div class="bottom-btn">{{$t('detail.addOrRemoveShelf')}}</div>
+        <div class="bottom-btn" @click.stop.prevent="trialListening()">{{$t('detail.listen')}}</div>
+        <div class="bottom-btn" @click.stop.prevent="addOrRemoveShelf()">{{inBookShelf ? $t('detail.isAddedToShelf') : $t('detail.addOrRemoveShelf')}}</div>
     </div>
 </template>
 <script>
 export default {
    name:'BottomBar',
    props: {
-       bookItem: Object
+       bookItem: Object,
+       inBookShelf: Boolean
    },
    methods: {
        readBook() {
            this.$emit('readBook')
+       },
+       trialListening() {
+           this.$emit('trialListening')
+       },
+       addOrRemoveShelf() {
+           this.$emit('addOrRemoveShelf')
        }
    }
 }

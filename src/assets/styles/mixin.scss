@@ -88,3 +88,12 @@ $animationType: linear;
     justify-content: center;
     align-items: flex-start;
 }
+
+@mixin scroll {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
